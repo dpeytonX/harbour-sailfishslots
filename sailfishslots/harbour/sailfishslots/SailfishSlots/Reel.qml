@@ -57,8 +57,10 @@ Column  {
             createSymbols()
 
             cur += interval
-            if(cur >= duration)
+            if(cur >= duration) {
+                cur = 0
                 stop()
+            }
         }
     }
 
@@ -69,13 +71,13 @@ Column  {
     }
 
     function createSymbols() {
-        Console.debug("here")
+        Console.verbose("creating symol")
         var randSymbolIndex = 0
         var curSymbol = 0
         var randSymbol = Math.random()
 
         for (var i = 0; i < UIConstants.ratios.length; i++) {
-            Console.debug("curSymbol: " + curSymbol + " Rand Symbol " + randSymbol)
+            Console.trace("curSymbol: " + curSymbol + " Rand Symbol " + randSymbol)
             curSymbol += UIConstants.ratios[i];
             if(curSymbol >= randSymbol) {
                 randSymbolIndex = i
@@ -96,7 +98,7 @@ Column  {
     Component.onCompleted: {
         Console.LOG_PRIORITY = Console.VERBOSE
         Console.info("Creating initial components")
-        Console.debug("Reel size: " + reelSize)
+        Console.trace("Reel size: " + reelSize)
         for(var i = 0; i < reelSize; i++)
           createSymbols()
     }

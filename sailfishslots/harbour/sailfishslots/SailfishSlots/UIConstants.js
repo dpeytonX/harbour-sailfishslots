@@ -24,4 +24,4 @@ var scatterSymbol = "🔔"
 var freeSpinSymbol = "🆓"
 
 var spinSpeedMs = 100
-var spinDurationMs = 2000
+var spinDurationMs = 1000
