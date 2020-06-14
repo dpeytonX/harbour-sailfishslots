@@ -1,0 +1,5 @@
+module SailfishWidgets.JS
+versioner 3.3 version.qml
+MathHelper 3.3 MathHelper.js
+IconThemes 3.3 IconThemes.js
+Variant 3.3 Variant.js

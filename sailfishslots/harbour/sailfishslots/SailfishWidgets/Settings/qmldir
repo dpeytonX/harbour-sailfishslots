@@ -1,0 +1,4 @@
+module SailfishWidgets.Settings
+versioner 3.3 version.qml
+plugin applicationsettings
+typeinfo settings.qmltypes

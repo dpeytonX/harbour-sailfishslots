@@ -1,0 +1,20 @@
+module SailfishWidgets.Components
+versioner 3.3 version.qml
+AboutDialog 3.3 AboutDialog.qml
+AboutPage 3.3 AboutPage.qml
+BusyPage 3.3 BusyPage.qml
+Heading 3.3 Heading.qml
+InformationalLabel 3.3 InformationalLabel.qml
+LabelButton 3.3 LabelButton.qml
+OrientationHelper 3.3 OrientationHelper.qml
+OrientationPage 3.3 OrientationPage.qml
+OrientationDialog 3.3 OrientationDialog.qml
+PageColumn 3.3 PageColumn.qml
+PageIndicator 3.3 PageIndicator.qml
+Paragraph 3.1 Paragraph.qml
+RadioGroup 3.3 RadioGroup.qml
+Spacer 3.3 Spacer.qml
+StandardCover 3.3 StandardCover.qml
+StandardListView 3.3 StandardListView.qml
+StandardMenuItem 3.3 StandardMenuItem.qml
+Subtext 3.3 Subtext.qml

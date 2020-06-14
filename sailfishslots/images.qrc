@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/images">
+        <file alias="desktop.png">harbour-sailfishslots.png</file>
+        <file alias="cover.png">cover-sailfishslots.png</file>
+    </qresource>
+</RCC>
