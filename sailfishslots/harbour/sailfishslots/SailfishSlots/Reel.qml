@@ -7,9 +7,11 @@ import Sailfish.Silica 1.0
 Column  {
     id: reelColumn
     signal spin(int duration)
+    signal spinOver
 
     property variant symbols: []
     property variant reelSize: Orientation.Portrait ? UIConstants.PORTRAIT_SYMBOL : UIConstants.LANDSCAPE_SYMBOL
+    property bool spinning: false
 
     move: Transition {
          NumberAnimation {
@@ -53,13 +55,16 @@ Column  {
         property int duration
 
         onTriggered: {
+            spinning = true
             symbols.pop().destroy()
             createSymbols()
 
             cur += interval
             if(cur >= duration) {
                 cur = 0
+                spinning = false
                 stop()
+                spinOver()
             }
         }
     }

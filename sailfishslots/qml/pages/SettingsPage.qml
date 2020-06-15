@@ -21,6 +21,7 @@ OrientationPage {
         property bool bgm: false
         property bool sfx: false
         property int lastCoins: UIConstants.defaultCoins
+        property bool vegasMode: false
     }
 
     InstalledLocales {
@@ -96,6 +97,20 @@ OrientationPage {
             validator: IntValidator { bottom: 1; top: 10000000 }
 
             onTextChanged: settings.lastCoins = text
+        }
+
+        TextSwitch {
+            property bool lastValue: settings.vegasMode
+
+            checked: settings.vegasMode
+            id: vegasText
+            text: qsTr("Vegas Mode")
+            visible: lastValue || settings.vegasMode || cheatMode
+
+            onCheckedChanged: {
+                settings.vegasMode = checked
+                lastValue = !checked
+            }
         }
     }
 
