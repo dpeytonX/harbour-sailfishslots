@@ -65,47 +65,47 @@
 <context>
     <name>MainApp</name>
     <message>
-        <location filename="../qml/pages/MainApp.qml" line="53"/>
+        <location filename="../qml/pages/MainApp.qml" line="59"/>
         <source>Slot machine</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainApp.qml" line="99"/>
+        <location filename="../qml/pages/MainApp.qml" line="105"/>
         <source>Auto Spin</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainApp.qml" line="99"/>
+        <location filename="../qml/pages/MainApp.qml" line="105"/>
         <source>Stop Auto Spin</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainApp.qml" line="136"/>
+        <location filename="../qml/pages/MainApp.qml" line="142"/>
         <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainApp.qml" line="150"/>
+        <location filename="../qml/pages/MainApp.qml" line="156"/>
         <source>Coins</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainApp.qml" line="126"/>
+        <location filename="../qml/pages/MainApp.qml" line="132"/>
         <source>Help</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainApp.qml" line="88"/>
+        <location filename="../qml/pages/MainApp.qml" line="94"/>
         <source>Spin!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainApp.qml" line="116"/>
+        <location filename="../qml/pages/MainApp.qml" line="122"/>
         <source>Give me coins!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainApp.qml" line="131"/>
+        <location filename="../qml/pages/MainApp.qml" line="137"/>
         <source>About</source>
         <translation type="unfinished"></translation>
     </message>

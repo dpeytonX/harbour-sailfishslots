@@ -17,7 +17,13 @@ OrientationPage {
     property variant timer: new JsTimer.JsTimer(mainApp)
     property variant _fixedPullUpItems: []
 
+    property int reelWidth: mainApp.orientation == Orientation.Portrait ? mainApp.width / 2 : mainApp.width / 3
+    property int reelHeight: mainApp.orientation == Orientation.Portrait ? mainApp.height / 4 : mainApp.height
+    property int reelSizeCol: mainApp.orientation == Orientation.Portrait ? UIConstants.PORTRAIT_SYMBOL : UIConstants.LANDSCAPE_SYMBOL
+
     Component.onCompleted: _vegasModeInit()
+
+    onHeightChanged: _vegasModeInit()
 
     onSpinningNowChanged: {
         if(autoSpinActive && !spinningNow)
@@ -150,37 +156,46 @@ OrientationPage {
                 text:  coins + "  " + qsTr("Coins")
             }
         }
+    }
 
-        Column {
-            id: reelColumn
-            width: parent.width - Theme.paddingLarge * 2
-            x: Screen.width / 4
-            y: Screen.height / 12
-            spacing: Theme.paddingMedium
 
-            property int reelWidth: Orientation.Portrait ? Screen.width / 2 : Screen.height / 3
-            property int reelHeight: Orientation.Portrait ? Screen.height / 4 : Screen.height / 3
+    Reel {
+        id: reel1
+        width: mainApp.reelWidth
+        height: mainApp.reelHeight
+        reelSize: mainApp.reelSizeCol
+        x: mainApp.orientation == Orientation.Portrait ? width / 4 : mainApp.reelWidth
+        y: mainApp.orientation == Orientation.Portrait ? height / 2 : Theme.paddingLarge
 
-            Reel {
-                id: reel1
-                width: parent.reelWidth
-                height: parent.reelHeight
-            }
-
-            Reel {
-                id: reel2
-                width: parent.reelWidth
-                height: parent.reelHeight
-            }
-
-            Reel {
-                id: reel3
-                width: parent.reelWidth
-                height: parent.reelHeight
-            }
+        Component.onCompleted: {
+            Console.debug("x: " + x + ",y: " + y + ",width: " + width +",height: " + height)
         }
+    }
 
-        VerticalScrollDecorator {}
+    Reel {
+        id: reel2
+        width: mainApp.reelWidth
+        height: mainApp.reelHeight
+        reelSize: mainApp.reelSizeCol
+        x: mainApp.orientation == Orientation.Portrait ? width / 4 : (mainApp.reelWidth * 2 + Theme.paddingLarge)
+        y: mainApp.orientation == Orientation.Portrait ? height / 2 + height: Theme.paddingLarge
+
+        Component.onCompleted: {
+            Console.debug("x: " + x + ",y: " + y + ",width: " + width +",height: " + height)
+        }
+    }
+
+    Reel {
+        id: reel3
+        width: mainApp.reelWidth
+        height: mainApp.reelHeight
+        reelSize: mainApp.reelSizeCol
+        x: mainApp.orientation == Orientation.Portrait ? width / 4 : (mainApp.reelWidth * 3 + Theme.paddingLarge)
+        y: mainApp.orientation == Orientation.Portrait ? height / 2 + height * 2 : Theme.paddingLarge
+
+        Component.onCompleted: {
+            Console.debug("x: " + x + ",y: " + y + ",width: " + width +",height: " + height)
+        }
     }
 
     function spin() {
@@ -196,15 +211,15 @@ OrientationPage {
             _fixedPullUpItems[i].visible = false
             _fixedPullUpItems[i].destroy()
         }
-    _fixedPullUpItems = []
+        _fixedPullUpItems = []
         leverMenu._content.children = []
 
         vegasLoader.createObj(spinMenuItem, leverMenu._contentColumn)
 
         if(vegasMode) {
             var menuItemHeight = helpMenuItem.height
-            var height = Screen.height - (menuItemHeight * 8)
-            Console.debug("Screen height: " + Screen.height + ", spinMenu Height: " + menuItemHeight + ", result height: " + height)
+            var height = mainApp.height - (menuItemHeight * 8)
+            Console.debug("Screen height: " + mainApp.height + ", spinMenu Height: " + menuItemHeight + ", result height: " + height)
             var i = 0
             while(height / (menuItemHeight * i++) > 1) {
                 Console.debug("Creating vegas mode menu items")

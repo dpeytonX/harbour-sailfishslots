@@ -10,7 +10,7 @@ Column  {
     signal spinOver
 
     property variant symbols: []
-    property variant reelSize: Orientation.Portrait ? UIConstants.PORTRAIT_SYMBOL : UIConstants.LANDSCAPE_SYMBOL
+    property variant reelSize: UIConstants.PORTRAIT_SYMBOL
     property bool spinning: false
 
     move: Transition {
