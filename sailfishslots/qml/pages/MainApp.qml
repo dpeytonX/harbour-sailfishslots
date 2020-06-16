@@ -17,9 +17,9 @@ OrientationPage {
     property variant timer: new JsTimer.JsTimer(mainApp)
     property variant _fixedPullUpItems: []
 
-    property int reelWidth: mainApp.orientation == Orientation.Portrait ? mainApp.width / 2 : mainApp.width / 3
-    property int reelHeight: mainApp.orientation == Orientation.Portrait ? mainApp.height / 4 : mainApp.height
-    property int reelSizeCol: mainApp.orientation == Orientation.Portrait ? UIConstants.PORTRAIT_SYMBOL : UIConstants.LANDSCAPE_SYMBOL
+    property int reelWidth: orientation == Orientation.Portrait ? width / 2 : width / 6
+    property int reelHeight: orientation == Orientation.Portrait ? height / 4 : height - infoColumn.height
+    property int reelSizeCol: orientation == Orientation.Portrait ? UIConstants.PORTRAIT_SYMBOL : UIConstants.LANDSCAPE_SYMBOL
 
     Component.onCompleted: _vegasModeInit()
 
@@ -27,7 +27,7 @@ OrientationPage {
 
     onSpinningNowChanged: {
         if(autoSpinActive && !spinningNow)
-            JsTimer.setTimeout(timer, spin, UIConstants.spinDurationMs)
+            JsTimer.setTimeout(timer, spin, UIConstants.spinDurationMs * 2)
     }
 
     onVegasModeChanged: _vegasModeInit()
@@ -71,7 +71,9 @@ OrientationPage {
 
     Component {
         id: vegusMenuItem
-        MenuItem {}
+        MenuItem {
+            enabled: false
+        }
     }
 
     DynamicLoader {
@@ -159,43 +161,42 @@ OrientationPage {
     }
 
 
-    Reel {
+   Reel {
         id: reel1
-        width: mainApp.reelWidth
-        height: mainApp.reelHeight
         reelSize: mainApp.reelSizeCol
-        x: mainApp.orientation == Orientation.Portrait ? width / 4 : mainApp.reelWidth
-        y: mainApp.orientation == Orientation.Portrait ? height / 2 : Theme.paddingLarge
+        onReelSizeChanged: recalculateReels(this, 1)
 
-        Component.onCompleted: {
-            Console.debug("x: " + x + ",y: " + y + ",width: " + width +",height: " + height)
-        }
+        Component.onCompleted: recalculateReels(this, 1)
     }
 
     Reel {
         id: reel2
-        width: mainApp.reelWidth
-        height: mainApp.reelHeight
         reelSize: mainApp.reelSizeCol
-        x: mainApp.orientation == Orientation.Portrait ? width / 4 : (mainApp.reelWidth * 2 + Theme.paddingLarge)
-        y: mainApp.orientation == Orientation.Portrait ? height / 2 + height: Theme.paddingLarge
+        onReelSizeChanged: recalculateReels(this, 2)
 
-        Component.onCompleted: {
-            Console.debug("x: " + x + ",y: " + y + ",width: " + width +",height: " + height)
-        }
+        Component.onCompleted: recalculateReels(this, 2)
     }
 
     Reel {
         id: reel3
-        width: mainApp.reelWidth
-        height: mainApp.reelHeight
         reelSize: mainApp.reelSizeCol
-        x: mainApp.orientation == Orientation.Portrait ? width / 4 : (mainApp.reelWidth * 3 + Theme.paddingLarge)
-        y: mainApp.orientation == Orientation.Portrait ? height / 2 + height * 2 : Theme.paddingLarge
+        onReelSizeChanged: recalculateReels(this, 3)
 
-        Component.onCompleted: {
-            Console.debug("x: " + x + ",y: " + y + ",width: " + width +",height: " + height)
-        }
+        Component.onCompleted: recalculateReels(this, 3)
+    }
+
+    function recalculateReels (reel, id) {
+        JsTimer.setTimeout(new JsTimer.JsTimer(mainApp), function() {
+            reel.width = mainApp.reelWidth
+            reel.height = mainApp.reelHeight
+            reel.x = mainApp.orientation == Orientation.Portrait ? reel.width / 4 : reel.width * (id - 1) + Theme.paddingLarge
+            reel.y = mainApp.orientation == Orientation.Portrait ? reel.height / 2 + (reel.height * (id - 1)) : Theme.paddingSmall
+            Console.debug("orientation: " + mainApp.orientation + ", id: " + id +
+                          ", x: " + reel.x +
+                          ", y: " + reel.y +
+                          ", width: " + reel.width +
+                          ", height: " + reel.height)
+        }, 200)
     }
 
     function spin() {

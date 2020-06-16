@@ -70,42 +70,42 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainApp.qml" line="105"/>
+        <location filename="../qml/pages/MainApp.qml" line="107"/>
         <source>Auto Spin</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainApp.qml" line="105"/>
+        <location filename="../qml/pages/MainApp.qml" line="107"/>
         <source>Stop Auto Spin</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainApp.qml" line="142"/>
+        <location filename="../qml/pages/MainApp.qml" line="144"/>
         <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainApp.qml" line="156"/>
+        <location filename="../qml/pages/MainApp.qml" line="158"/>
         <source>Coins</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainApp.qml" line="132"/>
+        <location filename="../qml/pages/MainApp.qml" line="134"/>
         <source>Help</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainApp.qml" line="94"/>
+        <location filename="../qml/pages/MainApp.qml" line="96"/>
         <source>Spin!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainApp.qml" line="122"/>
+        <location filename="../qml/pages/MainApp.qml" line="124"/>
         <source>Give me coins!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainApp.qml" line="137"/>
+        <location filename="../qml/pages/MainApp.qml" line="139"/>
         <source>About</source>
         <translation type="unfinished"></translation>
     </message>
