@@ -65,47 +65,52 @@
 <context>
     <name>MainApp</name>
     <message>
-        <location filename="../qml/pages/MainApp.qml" line="59"/>
+        <location filename="../qml/pages/MainApp.qml" line="83"/>
         <source>Slot machine</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainApp.qml" line="107"/>
+        <location filename="../qml/pages/MainApp.qml" line="130"/>
         <source>Auto Spin</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainApp.qml" line="107"/>
+        <location filename="../qml/pages/MainApp.qml" line="130"/>
         <source>Stop Auto Spin</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainApp.qml" line="144"/>
+        <location filename="../qml/pages/MainApp.qml" line="172"/>
         <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainApp.qml" line="158"/>
+        <location filename="../qml/pages/MainApp.qml" line="186"/>
         <source>Coins</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainApp.qml" line="134"/>
+        <location filename="../qml/pages/MainApp.qml" line="192"/>
+        <source>Bet</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/MainApp.qml" line="162"/>
         <source>Help</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainApp.qml" line="96"/>
+        <location filename="../qml/pages/MainApp.qml" line="120"/>
         <source>Spin!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainApp.qml" line="124"/>
+        <location filename="../qml/pages/MainApp.qml" line="152"/>
         <source>Give me coins!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainApp.qml" line="139"/>
+        <location filename="../qml/pages/MainApp.qml" line="167"/>
         <source>About</source>
         <translation type="unfinished"></translation>
     </message>

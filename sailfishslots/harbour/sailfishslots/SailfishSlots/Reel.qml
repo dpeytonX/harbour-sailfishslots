@@ -56,6 +56,7 @@ Column  {
         id: symbolTemplate
         Text {
             property int duration
+            property int symbolIndex
 
             id: txt
             width: reelColumn.width
@@ -65,7 +66,6 @@ Column  {
             text: UIConstants.symbols[0]
             font.pixelSize: reelSize == UIConstants.PORTRAIT_SYMBOL ? parent.width : parent.height / UIConstants.LANDSCAPE_SYMBOL
             color: Theme.highlightColor
-
         }
     }
 
@@ -89,8 +89,7 @@ Column  {
 
         onTriggered: {
             spinning = true
-            //destroySymbols()
-            createSymbols("")
+            createSymbols()
 
             cur += interval
             if(cur >= duration) {
@@ -102,35 +101,33 @@ Column  {
         }
     }
 
-    function createSymbols(t) {
-        Console.trace("creating symbol: " + t)
+    function createSymbols() {
+        var t=""
+        var randSymbolIndex = 0
+        var curSymbol = 0
+        var randSymbol = Math.random()
 
-        if (t == "") {
-            var randSymbolIndex = 0
-            var curSymbol = 0
-            var randSymbol = Math.random()
-
-            for (var i = 0; i < UIConstants.ratios.length; i++) {
-                Console.trace("curSymbol: " + curSymbol + " Rand Symbol " + randSymbol)
-                curSymbol += UIConstants.ratios[i];
-                if(curSymbol >= randSymbol) {
-                    randSymbolIndex = i
-                    break;
-                }
+        for (var i = 0; i < UIConstants.ratios.length; i++) {
+            Console.trace("curSymbol: " + curSymbol + " Rand Symbol " + randSymbol)
+            curSymbol += UIConstants.ratios[i];
+            if(curSymbol >= randSymbol) {
+                randSymbolIndex = i
+                break;
             }
-
-            t = UIConstants.symbols[randSymbolIndex]
         }
 
-        Console.debug("current symbol: " + randSymbolIndex + " " + t)
+        t = UIConstants.symbols[randSymbolIndex]
 
-        loader.create(symbolTemplate, reelColumn, {text: t })
+
+        Console.trace("current symbol: " + randSymbolIndex + " " + t)
+
+        loader.create(symbolTemplate, reelColumn, {text: t, symbolIndex: randSymbolIndex })
     }
 
     function organizeSymbols() {
         var selectedIndex = getSelectedComponent()
 
-        Console.debug("Reel size: " + reelSize + ", selected Index: " + selectedIndex + ", size: " + symbols.length)
+        Console.trace("Reel size: " + reelSize + ", selected Index: " + selectedIndex + ", size: " + symbols.length)
         for(var i = 0; i < symbols.length; i++) {
             if(reelSize == UIConstants.LANDSCAPE_SYMBOL)
                 symbols[i].visible = selectedIndex - 1 <= i && i <= selectedIndex + 1
@@ -147,10 +144,10 @@ Column  {
     }
 
     Component.onCompleted: {
-        Console.LOG_PRIORITY = Console.VERBOSE
+        Console.LOG_PRIORITY = Console.DEBUG
         Console.info("Creating initial components")
         Console.trace("Reel size: " + reelSize + ", Max symbols: " + UIConstants.MAX_SYMBOL)
         for(var i = 0; i < UIConstants.MAX_SYMBOL; i++)
-            createSymbols("")
+            createSymbols()
     }
 }

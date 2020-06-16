@@ -3,7 +3,7 @@ import Sailfish.Silica 1.0
 import harbour.sailfishslots.SailfishWidgets.Components 3.3
 import harbour.sailfishslots.SailfishSlots 1.0
 
-Dialog {
+OrientationDialog {
 
     PageColumn {
         title: qsTr("Help")

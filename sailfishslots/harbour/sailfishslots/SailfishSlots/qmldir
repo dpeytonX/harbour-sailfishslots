@@ -1,3 +1,4 @@
 module harbour.opentip.OpenTip
 Reel 1.0 Reel.qml
 UIConstants 1.0 UIConstants.js
+Rules 1.0 Rules.js

@@ -12,25 +12,48 @@ OrientationPage {
 
     property alias coins: settings.lastCoins
     property alias vegasMode: settings.vegasMode
+    property alias bet: settings.bet
     property bool autoSpinActive: false
     property bool spinningNow:  reel1.spinning || reel2.spinning || reel3.spinning
-    property variant timer: new JsTimer.JsTimer(mainApp)
+    property variant autoSpinTimer: new JsTimer.JsTimer(mainApp, spin, UIConstants.spinDurationMs * 2)
     property variant _fixedPullUpItems: []
 
     property int reelWidth: orientation == Orientation.Portrait ? width / 2 : width / 6
-    property int reelHeight: orientation == Orientation.Portrait ? height / 4 : height - infoColumn.height
+    property int reelHeight: orientation == Orientation.Portrait ? height / 4 : height - infoColumn.height - betBox.height
     property int reelSizeCol: orientation == Orientation.Portrait ? UIConstants.PORTRAIT_SYMBOL : UIConstants.LANDSCAPE_SYMBOL
+
+    property int _recalculating: 0
+
+    onActiveFocusChanged: autoSpinActive = activeFocus ? autoSpinActive : false
 
     Component.onCompleted: _vegasModeInit()
 
     onHeightChanged: _vegasModeInit()
 
+    onAutoSpinActiveChanged: if(autoSpinActive && !spinningNow) autoSpinTimer.start()
+
     onSpinningNowChanged: {
-        if(autoSpinActive && !spinningNow)
-            JsTimer.setTimeout(timer, spin, UIConstants.spinDurationMs * 2)
+        if(!spinningNow) {
+            var rules = new Rules.Rules(reel1, reel2, reel3)
+            if(rules.isWinner()) {
+                var earning = rules.getEarnings(bet)
+                Console.info("USER WON " + earning)
+                coins += earning
+            }
+
+            if(autoSpinActive) autoSpinTimer.start()
+        }
     }
 
     onVegasModeChanged: _vegasModeInit()
+
+    onCoinsChanged: {
+        Console.debug("Current coin count: " + coins)
+        if(_hasBareMinimumCoins() && coins * UIConstants.betThreshold < betBox.currentItem.text) {
+            betBox.currentIndex = betBox.currentIndex - 1
+            bet = UIConstants.bets[betBox.currentIndex]
+        }
+    }
 
     ApplicationSettings {
         applicationName: "harbour-sailfishslots"
@@ -40,6 +63,7 @@ OrientationPage {
         property int lastCoins: UIConstants.defaultCoins
         property bool bgm: false
         property bool sfx: false
+        property int bet: UIConstants.bets[0]
         property bool vegasMode: false
     }
 
@@ -96,23 +120,27 @@ OrientationPage {
             text: qsTr("Spin!")
             onClicked: spin()
 
-            enabled: !spinningNow
+            enabled: !spinningNow && _hasBareMinimumCoins()
         }
     }
 
     Component {
         id: autoSpinMenuItem
         StandardMenuItem {
-
             text: autoSpinActive ? qsTr("Stop Auto Spin") : qsTr("Auto Spin")
-            onClicked: {
-                autoSpinActive = !autoSpinActive
-                JsTimer.setTimeout(timer, spin, UIConstants.spinDurationMs)
-            }
+            onClicked: autoSpinActive = !autoSpinActive
+            enabled: _hasBareMinimumCoins()
+
+            onEnabledChanged: if(!enabled) autoSpinActive = false
         }
     }
 
     // ------- Start UI ----------
+
+    // Show busy indicator while we repaint the reels between transitions
+    PageBusyIndicator {
+        running: _recalculating != 0
+    }
 
     SilicaFlickable {
         anchors.fill: parent
@@ -123,7 +151,7 @@ OrientationPage {
             StandardMenuItem {
                 text: qsTr("Give me coins!")
                 onClicked: coins = UIConstants.defaultCoins
-                visible: coins <= UIConstants.defaultCoins / 2
+                visible: coins <= (coins * UIConstants.betThreshold < UIConstants.bets[0] || UIConstants.defaultCoins / 2)
             }
         }
 
@@ -158,10 +186,33 @@ OrientationPage {
                 text:  coins + "  " + qsTr("Coins")
             }
         }
+
+        ComboBox {
+            id: betBox
+            label: qsTr("Bet")
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: Theme.paddingMedium
+
+            currentIndex: UIConstants.bets.indexOf(settings.bet)
+
+            onCurrentIndexChanged: bet = UIConstants.bets[currentIndex]
+
+            menu: ContextMenu {
+                Repeater {
+                    model: UIConstants.bets
+                    StandardMenuItem {
+                        text: modelData
+                        enabled: coins * UIConstants.betThreshold >= modelData
+                        visible: enabled
+                        onClicked: bet = text
+                    }
+                }
+            }
+        }
     }
 
 
-   Reel {
+    Reel {
         id: reel1
         reelSize: mainApp.reelSizeCol
         onReelSizeChanged: recalculateReels(this, 1)
@@ -185,8 +236,24 @@ OrientationPage {
         Component.onCompleted: recalculateReels(this, 3)
     }
 
+    Text {
+        id: indicatorLabel
+
+        text: UIConstants.indicatorSymbol
+        font.pixelSize: mainApp.reelWidth
+        color: Theme.highlightColor
+
+        visible: reelSizeCol == UIConstants.LANDSCAPE_SYMBOL
+
+        width: mainApp.reelWidth
+        height: mainApp.reelWidth
+        x: Theme.paddingLarge + mainApp.reelWidth * 4 + width
+        y: mainApp.reelHeight / 3 - betBox.height / 2
+    }
+
     function recalculateReels (reel, id) {
-        JsTimer.setTimeout(new JsTimer.JsTimer(mainApp), function() {
+        _recalculating++
+        new JsTimer.JsTimer(mainApp, function() {
             reel.width = mainApp.reelWidth
             reel.height = mainApp.reelHeight
             reel.x = mainApp.orientation == Orientation.Portrait ? reel.width / 4 : reel.width * (id - 1) + Theme.paddingLarge
@@ -196,13 +263,18 @@ OrientationPage {
                           ", y: " + reel.y +
                           ", width: " + reel.width +
                           ", height: " + reel.height)
-        }, 200)
+            _recalculating--
+        }, 200).start()
     }
 
     function spin() {
-        reel1.spin(UIConstants.spinDurationMs * 1)
-        reel2.spin(UIConstants.spinDurationMs * 2)
-        reel3.spin(UIConstants.spinDurationMs * 3)
+        Console.info("Spinning, coin: " + coins + ", bet: " + bet)
+        if(_hasBareMinimumCoins()) {
+            coins -= bet
+            reel1.spin(UIConstants.spinDurationMs * 1)
+            reel2.spin(UIConstants.spinDurationMs * 2)
+            reel3.spin(UIConstants.spinDurationMs * 3)
+        }
     }
 
     function _vegasModeInit() {
@@ -219,7 +291,7 @@ OrientationPage {
 
         if(vegasMode) {
             var menuItemHeight = helpMenuItem.height
-            var height = mainApp.height - (menuItemHeight * 8)
+            var height = mainApp.height - (mainApp.orientation == Orientation.Portrait ? menuItemHeight * 8 : menuItemHeight * 6)
             Console.debug("Screen height: " + mainApp.height + ", spinMenu Height: " + menuItemHeight + ", result height: " + height)
             var i = 0
             while(height / (menuItemHeight * i++) > 1) {
@@ -232,5 +304,9 @@ OrientationPage {
         }
 
         vegasLoader.createObj(autoSpinMenuItem, leverMenu._contentColumn)
+    }
+
+    function _hasBareMinimumCoins() {
+        return coins * UIConstants.betThreshold >= UIConstants.bets[0]
     }
 }

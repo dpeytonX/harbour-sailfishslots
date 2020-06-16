@@ -54,7 +54,7 @@ import Sailfish.Silica 1.0
   \l {https://github.com/Armadill0/harbour-tasklist}{Tasklist}
 
   */
-Dialog {
+OrientationDialog {
     /*!
        \qmlproperty alias AboutPage::aboutTaskList
       An alias to the \c SilicaFlickable page container
