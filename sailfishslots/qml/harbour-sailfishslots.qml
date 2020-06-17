@@ -38,7 +38,7 @@ ApplicationWindow
         //onTipChanged: Console.debug("CoverPage: tip changed " + tip)
     }
 
-    Component.onCompleted: Console.LOG_PRIORITY = Console.DEBUG
+    Component.onCompleted: Console.LOG_PRIORITY = Console.TRACE
 }
 
 

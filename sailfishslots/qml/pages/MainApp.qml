@@ -1,4 +1,4 @@
-import QtQuick 2.2
+import QtQuick 2.6
 import Sailfish.Silica 1.0
 import harbour.sailfishslots.SailfishWidgets.Components 3.4
 import harbour.sailfishslots.SailfishWidgets.Settings 3.4
@@ -15,14 +15,20 @@ OrientationPage {
     property alias bet: settings.bet
     property bool autoSpinActive: false
     property bool spinningNow:  reel1.spinning || reel2.spinning || reel3.spinning
+    property int freeSpinActive: 0
+    property int bonusActive: 0
+    property bool specialStageActive: freeSpinActive > 0 || bonusActive > 0
+    property int bonusCoins: 0
     property variant autoSpinTimer: new JsTimer.JsTimer(mainApp, spin, UIConstants.spinDurationMs * 2)
-    property variant _fixedPullUpItems: []
 
-    property int reelWidth: orientation == Orientation.Portrait ? width / 2 : width / 6
-    property int reelHeight: orientation == Orientation.Portrait ? height / 4 : height - infoColumn.height - betBox.height
-    property int reelSizeCol: orientation == Orientation.Portrait ? UIConstants.PORTRAIT_SYMBOL : UIConstants.LANDSCAPE_SYMBOL
+    property int reelWidth: isPortrait ? width / 2 : width / 6
+    property int reelHeight: isPortrait ? height / 4 : height - infoColumn.height - betBox.height
+    property int reelSizeCol: isPortrait ? UIConstants.PORTRAIT_SYMBOL : UIConstants.LANDSCAPE_SYMBOL
 
     property int _recalculating: 0
+    property variant _fixedPullUpItems: []
+    property int _bonusCounter: 0
+    property int _freeCounter: 0
 
     onActiveFocusChanged: autoSpinActive = activeFocus ? autoSpinActive : false
 
@@ -38,10 +44,25 @@ OrientationPage {
             if(rules.isWinner()) {
                 var earning = rules.getEarnings(bet)
                 Console.info("USER WON " + earning)
-                coins += earning
+
+                if(rules.isFreeSpin()) {
+                    addCoins(earning)
+                    freeSpinMode(rules)
+                } else if(rules.isBonus()) {
+                    bonusCoins += earning
+                    bonusMode(rules)
+                } else if(bonusActive == 0 && bonusCoins > 0) {
+                    tallyBonus(rules.getBonusCoins(bonusCoins))
+                } else {
+                    addCoins(earning)
+                    _freeCounter++
+                    _bonusCounter++
+                }
             }
 
-            if(autoSpinActive) autoSpinTimer.start()
+            if(autoSpinActive) {
+                autoSpinTimer.start()
+            }
         }
     }
 
@@ -70,7 +91,7 @@ OrientationPage {
     //Lazy loading for pages
     Component {
         id: settingsPage
-        SettingsPage {}
+        SettingsPage {app: mainApp}
     }
 
     Component {
@@ -174,17 +195,81 @@ OrientationPage {
             }
         }
 
-        Column {
+        PageHeader {
+            id: modeHeader
+
+            title: {
+                if(bonusActive) return qsTr("Bonus")
+                else if (freeSpinActive) qsTr("Free Spin")
+                else return ""
+            }
+            visible: specialStageActive
+        }
+
+        Label {
+            id: spinRemainingText
+            // Don't allow the label to extend over the page stack indicator
+            visible: modeHeader.visible
+            text: (bonusActive ? bonusActive : freeSpinActive) + " " + (mainApp.isPortrait ? qsTr("Spins") : qsTr("Spins Remaining"))
+
+            truncationMode: TruncationMode.Fade
+            color: modeHeader.palette.highlightColor
+
+            y: modeHeader._titleItem.y
+
+            anchors {
+                left: parent.left
+                leftMargin: modeHeader.rightMargin
+            }
+            font {
+                pixelSize: Theme.fontSizeLarge
+                family: Theme.fontFamilyHeading
+            }
+            TextMetrics {
+                id: metrics
+                font: headerText.font
+                text: "X"
+            }
+        }
+
+        InformationalLabel {
+            id: plusHiddenLabel
+
+            anchors.bottom: infoColumn.top
+            anchors.right: parent.right
+            anchors.rightMargin: Theme.horizontalPageMargin
+            visible: false
+            text: "  " + qsTr("Coins")
+        }
+
+        InformationalLabel {
+            id: plusCoinsLabel
+
+            anchors.bottom: infoColumn.top
+            anchors.right: plusHiddenLabel.left
+            visible: true
+            text: ""
+
+            scale: visible ? 1.0 : 0.1
+            Behavior on scale {
+                SequentialAnimation {
+                    NumberAnimation  { duration: 500 ; easing.type: Easing.InOutBounce  }
+                    PropertyAnimation {}
+                    NumberAnimation  { target:plusCoinsLabel; property:"visible"; to: 0; duration: 500 ; easing.type: Easing.InOutBounce  }
+                }
+            }
+        }
+
+        InformationalLabel {
             id: infoColumn
-            width: parent.width - Theme.paddingLarge * 2
-            y: Theme.paddingLarge
-            x: Theme.paddingLarge
+
+            anchors.bottom: betBox.verticalCenter
+            anchors.bottomMargin: -1 * betBox.height / 4
+            anchors.right: parent.right
+            anchors.rightMargin: Theme.horizontalPageMargin
             z: 1000
 
-            InformationalLabel {
-                anchors.right: parent.right
-                text:  coins + "  " + qsTr("Coins")
-            }
+            text:  coins + "  " + qsTr("Coins")
         }
 
         ComboBox {
@@ -192,6 +277,7 @@ OrientationPage {
             label: qsTr("Bet")
             anchors.bottom: parent.bottom
             anchors.bottomMargin: Theme.paddingMedium
+            enabled: !specialStageActive
 
             currentIndex: UIConstants.bets.indexOf(settings.bet)
 
@@ -210,7 +296,6 @@ OrientationPage {
             }
         }
     }
-
 
     Reel {
         id: reel1
@@ -251,13 +336,29 @@ OrientationPage {
         y: mainApp.reelHeight / 3 - betBox.height / 2
     }
 
+    function freeSpinMode(rules) {
+        if(bonusActive) {
+            bonusActive += rules.getFreeSpins()
+        } else {
+            freeSpinActive += rules.getFreeSpins()
+        }
+        Console.info("Free Spins Happened in " + _freeCounter + " spins")
+        _freeCounter = 0
+    }
+
+    function bonusMode(rules) {
+        bonusActive += rules.getBonusSpins()
+        Console.info("Bonus Spins Happened in " + _bonusCounter + " spins")
+        _bonusCounter = 0
+    }
+
     function recalculateReels (reel, id) {
         _recalculating++
         new JsTimer.JsTimer(mainApp, function() {
             reel.width = mainApp.reelWidth
             reel.height = mainApp.reelHeight
-            reel.x = mainApp.orientation == Orientation.Portrait ? reel.width / 4 : reel.width * (id - 1) + Theme.paddingLarge
-            reel.y = mainApp.orientation == Orientation.Portrait ? reel.height / 2 + (reel.height * (id - 1)) : Theme.paddingSmall
+            reel.x = mainApp.isPortrait ? reel.width / 4 : reel.width * (id - 1) + Theme.paddingLarge
+            reel.y = mainApp.isPortrait ? reel.height / 2 + (reel.height * (id - 1)) : Theme.paddingSmall
             Console.debug("orientation: " + mainApp.orientation + ", id: " + id +
                           ", x: " + reel.x +
                           ", y: " + reel.y +
@@ -270,11 +371,28 @@ OrientationPage {
     function spin() {
         Console.info("Spinning, coin: " + coins + ", bet: " + bet)
         if(_hasBareMinimumCoins()) {
-            coins -= bet
+            if(bonusActive) {
+                bonusActive--
+            } else if(freeSpinActive) {
+                freeSpinActive --
+            } else
+                addCoins(-1 * bet)
+
             reel1.spin(UIConstants.spinDurationMs * 1)
             reel2.spin(UIConstants.spinDurationMs * 2)
             reel3.spin(UIConstants.spinDurationMs * 3)
         }
+    }
+
+    function addCoins(c) {
+        coins += c
+        plusCoinsLabel.text = (c < 0 ? "" : "+") + c
+        plusCoinsLabel.visible = true
+    }
+
+    function tallyBonus(bc) {
+        addCoins(bc)
+        bonusCoins = 0
     }
 
     function _vegasModeInit() {
@@ -291,7 +409,7 @@ OrientationPage {
 
         if(vegasMode) {
             var menuItemHeight = helpMenuItem.height
-            var height = mainApp.height - (mainApp.orientation == Orientation.Portrait ? menuItemHeight * 8 : menuItemHeight * 6)
+            var height = mainApp.height - (mainApp.isPortrait ? menuItemHeight * 8 : menuItemHeight * 6)
             Console.debug("Screen height: " + mainApp.height + ", spinMenu Height: " + menuItemHeight + ", result height: " + height)
             var i = 0
             while(height / (menuItemHeight * i++) > 1) {

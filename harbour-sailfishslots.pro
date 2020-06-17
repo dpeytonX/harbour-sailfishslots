@@ -15,4 +15,5 @@ OTHER_FILES += rpm/* README_template.md README.md
 
 DISTFILES += \
     sailfishslots/harbour/sailfishslots/SailfishSlots/Rules.js \
+    sailfishslots/harbour/sailfishslots/SailfishWidgets/Components/FlickableColumn.qml \
     sailfishslots/harbour/sailfishslots/SailfishWidgets/JS/JsTimer.js

@@ -15,41 +15,26 @@ Column  {
 
     onReelSizeChanged: {
         if(!spinning)
-            //TODO: this assumes 1 & 3 for portrait and landscape symbols. Could try to generalize
-            organizeSymbols()
+           organizeSymbols()
     }
-
+/*
     move: Transition {
         NumberAnimation {
             id: number;
             properties: "x,y";
-            duration: UIConstants.spinSpeedMs / 2
+            duration: UIConstants.spinSpeedMs
         }
-    }
+    }*/
 
 
     onSpin: {
-        Console.log("Duration " + duration)
+        Console.debug("Duration " + duration)
         spinTimer.duration = duration
         spinTimer.start()
     }
 
     onSpinOver: {
-        var upper = UIConstants.MAX_SYMBOL + getSelectedComponent()
-        Console.log("Clean up: " + symbols.length + ", initiate at: " + upper )
-
-
-        if(symbols.length > upper) {
-            var componentArray = []
-            for(var i = 0; i < symbols.length; i++) {
-                if(i < getSelectedComponent() - UIConstants.MAX_SYMBOL || i > getSelectedComponent() + UIConstants.MAX_SYMBOL)
-                    symbols[i].destroy()
-                else
-                    componentArray.push(symbols[i])
-            }
-            symbols = componentArray
-            Console.log("New component size: " + symbols.length)
-        }
+        _cleanUp()
     }
 
     Component {
@@ -97,6 +82,8 @@ Column  {
                 spinning = false
                 stop()
                 spinOver()
+            } else {
+                _cleanUp()
             }
         }
     }
@@ -143,8 +130,24 @@ Column  {
         return Math.floor(symbols.length / 2)
     }
 
+    function _cleanUp() {
+        var upper = UIConstants.MAX_SYMBOL + getSelectedComponent()
+        Console.debug("Clean up: " + symbols.length + ", initiate at: " + upper )
+
+        if(symbols.length > upper) {
+            var componentArray = []
+            for(var i = 0; i < symbols.length; i++) {
+                if(i < getSelectedComponent() - UIConstants.MAX_SYMBOL || i > getSelectedComponent() + UIConstants.MAX_SYMBOL)
+                    symbols[i].destroy()
+                else
+                    componentArray.push(symbols[i])
+            }
+            symbols = componentArray
+            Console.debug("New component size: " + symbols.length)
+        }
+    }
+
     Component.onCompleted: {
-        Console.LOG_PRIORITY = Console.DEBUG
         Console.info("Creating initial components")
         Console.trace("Reel size: " + reelSize + ", Max symbols: " + UIConstants.MAX_SYMBOL)
         for(var i = 0; i < UIConstants.MAX_SYMBOL; i++)
