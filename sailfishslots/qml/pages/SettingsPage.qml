@@ -101,37 +101,28 @@ OrientationPage {
                 }
             }
 
-            Subtext { visible: cheatMode; text: qsTr("Cheat Mode")}
-
-            Label { visible:  cheatMode; text: qsTr("Enter coin value");}
+            Subtext { visible: cheatMode; text: qsTr("Set coins")}
 
             TextField {
                 id: cheatText
                 visible: cheatMode
                 placeholderText: qsTr("Enter coin value")
                 validator: IntValidator { bottom: 1; top: 10000000 }
+                text: settings.lastCoins
 
                 onTextChanged: settings.lastCoins = text
+                EnterKey.onClicked: focus = false
             }
 
-            LabelButton {
-                visible: cheatMode
-                text: qsTr("Enable Bonus Mode")
-                onClicked: app.bonusActive += 5
-            }
-
-            LabelButton {
-                visible: cheatMode
-                text: qsTr("Enable Free Spin Mode")
-                onClicked: app.freeSpinActive += 5
-            }
+            Subtext { visible: cheatMode; text: qsTr("Special")}
 
             TextSwitch {
                 property bool lastValue: settings.vegasMode
 
                 checked: settings.vegasMode
                 id: vegasText
-                text: qsTr("Vegas Mode")
+                text: qsTr("Vegas")
+                description: qsTr("Simulate a lever using the pull down menu")
                 visible: lastValue || settings.vegasMode || cheatMode
 
                 onCheckedChanged: {
@@ -139,6 +130,23 @@ OrientationPage {
                     lastValue = !checked
                 }
             }
+
+            ButtonLayout {
+                Button {
+                    visible: cheatMode
+                    text: qsTr("Bonus Spins")
+                    enabled: !app.bonusActive
+                    onClicked: app.bonusActive += 5
+                }
+
+                Button {
+                    visible: cheatMode
+                    text: qsTr("Free Spins")
+                    enabled: !app.freeSpinActive
+                    onClicked: app.freeSpinActive += 5
+                }
+            }
+
         }}
 
     OrientationHelper {}

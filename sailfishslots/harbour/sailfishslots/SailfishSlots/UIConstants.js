@@ -33,5 +33,5 @@ var freeSpinSymbol = "🆓"
 
 var indicatorSymbol = "⇽"
 
-var spinSpeedMs = 50
+var spinSpeedMs = 75
 var spinDurationMs = 1000

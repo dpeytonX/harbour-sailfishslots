@@ -227,7 +227,7 @@ OrientationPage {
             }
             TextMetrics {
                 id: metrics
-                font: headerText.font
+                font: spinRemainingText.font
                 text: "X"
             }
         }

@@ -39,6 +39,20 @@ function Rules(reelObj1, reelObj2, reelObj3) {
 
     this.isBonus = function() { return this.threeOfAKind && sym1 == wi; }
 
+    this.getMostValuableSymbol = function() {
+        if(this.isBonus)
+            return wi
+        var symArray = []
+        if(sym1 != wi) symArray.push(sym1)
+        if(sym2 != wi) symArray.push(sym2)
+        if(sym3 != wi) symArray.push(sym3)
+
+        symArray.sort(function(a, b) {
+            return (UIConstants.ratios[a] - UIConstants.ratios[b]) * 100
+        })
+        return symArray[0]
+    }
+
     this.getEarnings = function(bet) {
         if(!this.isWinner())
             return 0

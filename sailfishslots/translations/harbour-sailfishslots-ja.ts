@@ -170,28 +170,37 @@
     </message>
     <message>
         <location filename="../qml/pages/SettingsPage.qml" line="104"/>
-        <source>Cheat Mode</source>
+        <source>Set coins</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="106"/>
-        <location filename="../qml/pages/SettingsPage.qml" line="111"/>
-        <source>Enter coin value</source>
+        <location filename="../qml/pages/SettingsPage.qml" line="117"/>
+        <source>Special</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="119"/>
-        <source>Enable Bonus Mode</source>
+        <location filename="../qml/pages/SettingsPage.qml" line="124"/>
+        <source>Vegas</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qml/pages/SettingsPage.qml" line="125"/>
-        <source>Enable Free Spin Mode</source>
+        <source>Simulate a lever using the pull down menu</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="134"/>
-        <source>Vegas Mode</source>
+        <location filename="../qml/pages/SettingsPage.qml" line="109"/>
+        <source>Enter coin value</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/SettingsPage.qml" line="137"/>
+        <source>Bonus Spins</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/SettingsPage.qml" line="144"/>
+        <source>Free Spins</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

@@ -17,15 +17,6 @@ Column  {
         if(!spinning)
            organizeSymbols()
     }
-/*
-    move: Transition {
-        NumberAnimation {
-            id: number;
-            properties: "x,y";
-            duration: UIConstants.spinSpeedMs
-        }
-    }*/
-
 
     onSpin: {
         Console.debug("Duration " + duration)
