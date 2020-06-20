@@ -136,7 +136,7 @@ OrientationPage {
                     visible: cheatMode
                     text: qsTr("Bonus Spins")
                     enabled: !app.bonusActive
-                    onClicked: app.bonusActive += 5
+                    onClicked: {app.bonusActive += 5; app.bonusCoins = app.bet}
                 }
 
                 Button {

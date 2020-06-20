@@ -3,19 +3,38 @@ import harbour.sailfishslots.SailfishWidgets.Utilities 3.3
 import "../QmlLogger/Logger.js" as Console
 import QtQuick 2.2
 import Sailfish.Silica 1.0
+import QtQuick.Particles 2.0
+import QtGraphicalEffects 1.0
 
 Column  {
     id: reelColumn
     signal spin(int duration)
     signal spinOver
 
+    property alias spinTimerDuration: spinTimer.duration
+
     property variant symbols: []
     property variant reelSize: UIConstants.PORTRAIT_SYMBOL
     property bool spinning: false
 
+    states: [
+        State {
+            name: "spinning"; when: spinning
+        }
+    ]
+
+    transitions: [
+        Transition {
+            from: ""
+            to: "spinning"
+            SpinningAnimation { target: reelColumn; duration: spinTimerDuration }
+        }
+    ]
+
+
     onReelSizeChanged: {
         if(!spinning)
-           organizeSymbols()
+            organizeSymbols()
     }
 
     onSpin: {

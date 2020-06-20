@@ -78,3 +78,6 @@ TRANSLATIONS += translations/$${TARGET}.ts \
 
 RESOURCES += \
     images.qrc
+
+DISTFILES += \
+    qml/pages/SpecialStage.qml

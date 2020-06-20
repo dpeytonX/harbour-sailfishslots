@@ -1,4 +1,5 @@
 import QtQuick 2.6
+import QtGraphicalEffects 1.0
 import Sailfish.Silica 1.0
 import harbour.sailfishslots.SailfishWidgets.Components 3.4
 import harbour.sailfishslots.SailfishWidgets.Settings 3.4
@@ -19,7 +20,7 @@ OrientationPage {
     property int bonusActive: 0
     property bool specialStageActive: freeSpinActive > 0 || bonusActive > 0
     property int bonusCoins: 0
-    property variant autoSpinTimer: new JsTimer.JsTimer(mainApp, spin, UIConstants.spinDurationMs * 2)
+    property variant autoSpinTimer: new JsTimer.JsTimer(mainApp, spin, UIConstants.autoSpinTimer)
 
     property int reelWidth: isPortrait ? width / 2 : width / 6
     property int reelHeight: isPortrait ? height / 4 : height - infoColumn.height - betBox.height
@@ -30,35 +31,47 @@ OrientationPage {
     property int _bonusCounter: 0
     property int _freeCounter: 0
 
-    onActiveFocusChanged: autoSpinActive = activeFocus ? autoSpinActive : false
+
+    property bool _lastSpinActive: false
+
+    onActiveFocusChanged: autoSpinActive = activeFocus ? _lastSpinActive : false
 
     Component.onCompleted: _vegasModeInit()
 
     onHeightChanged: _vegasModeInit()
 
-    onAutoSpinActiveChanged: if(autoSpinActive && !spinningNow) autoSpinTimer.start()
+    onAutoSpinActiveChanged: { if(autoSpinActive && !spinningNow) autoSpinTimer.start() }
 
     onSpinningNowChanged: {
         if(!spinningNow) {
             var rules = new Rules.Rules(reel1, reel2, reel3)
+            var tempCoins = 0
             if(rules.isWinner()) {
                 var earning = rules.getEarnings(bet)
                 Console.info("USER WON " + earning)
 
                 if(rules.isFreeSpin()) {
-                    addCoins(earning)
+                    tempCoins += earning
                     freeSpinMode(rules)
                 } else if(rules.isBonus()) {
-                    bonusCoins += earning
+                    tempCoins += earning
                     bonusMode(rules)
-                } else if(bonusActive == 0 && bonusCoins > 0) {
-                    tallyBonus(rules.getBonusCoins(bonusCoins))
                 } else {
-                    addCoins(earning)
-                    _freeCounter++
-                    _bonusCounter++
+                    tempCoins += earning
                 }
             }
+
+            if(bonusActive == 0 && bonusCoins > 0) {
+                bonusCoins += (tempCoins < bet? bet : tempCoins)
+                tallyBonus(rules.getBonusCoins(bonusCoins))
+            } else if(bonusActive) {
+                bonusCoins += tempCoins
+            } else {
+                addCoins(tempCoins)
+            }
+
+            _freeCounter++
+            _bonusCounter++
 
             if(autoSpinActive) {
                 autoSpinTimer.start()
@@ -73,6 +86,15 @@ OrientationPage {
         if(_hasBareMinimumCoins() && coins * UIConstants.betThreshold < betBox.currentItem.text) {
             betBox.currentIndex = betBox.currentIndex - 1
             bet = UIConstants.bets[betBox.currentIndex]
+        }
+    }
+
+    onSpecialStageActiveChanged: {
+        if(specialStageActive) {
+            if(bonusActive > 0)
+                loader.create(specialStageDialog, this, {bonus: bonusActive})
+            else
+                loader.create(specialStageDialog, this, {freeSpin: freeSpinActive})
         }
     }
 
@@ -114,6 +136,8 @@ OrientationPage {
         Help {}
     }
 
+    Component { id: specialStageDialog; SpecialStage{}}
+
     Component {
         id: vegusMenuItem
         MenuItem {
@@ -149,10 +173,10 @@ OrientationPage {
         id: autoSpinMenuItem
         StandardMenuItem {
             text: autoSpinActive ? qsTr("Stop Auto Spin") : qsTr("Auto Spin")
-            onClicked: autoSpinActive = !autoSpinActive
+            onClicked: { autoSpinActive = !autoSpinActive; _lastSpinActive = autoSpinActive;  }
             enabled: _hasBareMinimumCoins()
 
-            onEnabledChanged: if(!enabled) autoSpinActive = false
+            onEnabledChanged: if(!enabled) { _lastSpinActive = false; autoSpinActive = false }
         }
     }
 
@@ -297,12 +321,37 @@ OrientationPage {
         }
     }
 
+    Rectangle {
+        id: reel1Rect
+        z: -100
+        opacity: 0
+        width: reel1.width
+        height: reel1.height
+        color: "transparent"
+        x: reel1.x
+        y: reel1.y + (isLandscape ? Theme.paddingLarge : 0)
+    }
+
+    // https://doc.qt.io/qt-5/qml-qtgraphicaleffects-rectangularglow.html
+    //Need rectangular glow
+    // Glow works, with a rectangle, but the rectangle color overtakes the phone background
+    Glow {
+        id: glow
+        anchors.fill: reel1Rect
+        radius: reel1.state == "spinning" ? 20 : 0
+        source: reel1Rect
+        spread: 0.15
+        color: Theme.highlightColor
+        z: -1
+    }
+
     Reel {
         id: reel1
         reelSize: mainApp.reelSizeCol
         onReelSizeChanged: recalculateReels(this, 1)
 
         Component.onCompleted: recalculateReels(this, 1)
+
     }
 
     Reel {
@@ -378,19 +427,23 @@ OrientationPage {
             } else
                 addCoins(-1 * bet)
 
-            reel1.spin(UIConstants.spinDurationMs * 1)
-            reel2.spin(UIConstants.spinDurationMs * 2)
-            reel3.spin(UIConstants.spinDurationMs * 3)
+            reel1.spin(UIConstants.spinDuration1Ms)
+            reel2.spin(UIConstants.spinDuration2Ms)
+            reel3.spin(UIConstants.spinDuration3Ms)
         }
     }
 
     function addCoins(c) {
+        if(c == 0)
+            return
+
         coins += c
         plusCoinsLabel.text = (c < 0 ? "" : "+") + c
         plusCoinsLabel.visible = true
     }
 
     function tallyBonus(bc) {
+        loader.create(specialStageDialog, this, {jackpot: bc})
         addCoins(bc)
         bonusCoins = 0
     }

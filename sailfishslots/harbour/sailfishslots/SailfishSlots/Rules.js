@@ -35,9 +35,13 @@ function Rules(reelObj1, reelObj2, reelObj3) {
 
     this.getBonusSpins = function()  { return UIConstants.bonusSpins; }
 
-    this.getBonusCoins = function(coin) { return coin * UIConstants.bonusMultiplier; }
+    this.getBonusCoins = function(coin) { return (coin == 0 ? 1 : coin) * UIConstants.bonusMultiplier; }
 
-    this.isBonus = function() { return this.threeOfAKind && sym1 == wi; }
+    this.isBonus = function() {
+        return (sym1 == wi || sym1 == UIConstants.sevenIndex) &&
+                (sym2 == wi || sym2 == UIConstants.sevenIndex) &&
+                (sym3 == wi || sym3 == UIConstants.sevenIndex);
+    }
 
     this.getMostValuableSymbol = function() {
         if(this.isBonus)
