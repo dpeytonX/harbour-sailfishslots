@@ -1,11 +1,13 @@
 import QtQuick 2.6
 import QtGraphicalEffects 1.0
+import QtMultimedia 5.0
 import Sailfish.Silica 1.0
 import harbour.sailfishslots.SailfishWidgets.Components 3.4
 import harbour.sailfishslots.SailfishWidgets.Settings 3.4
 import harbour.sailfishslots.SailfishWidgets.Utilities 3.4
 import harbour.sailfishslots.SailfishWidgets.JS 3.3
 import harbour.sailfishslots.SailfishSlots 1.0
+
 import "../../harbour/sailfishslots/QmlLogger/Logger.js" as Console
 
 OrientationPage {
@@ -14,8 +16,11 @@ OrientationPage {
     property alias coins: settings.lastCoins
     property alias vegasMode: settings.vegasMode
     property alias bet: settings.bet
+    property alias wonCoins: plusCoinsLabel.text
     property bool autoSpinActive: false
-    property bool spinningNow:  reel1.spinning || reel2.spinning || reel3.spinning
+    property bool quickSpinningNow: false
+    property bool spinningNow:  reel1.spinning || reel2.spinning || reel3.spinning || quickSpinningNow
+    property bool canSpin: !spinningNow && _hasBareMinimumCoins()
     property int freeSpinActive: 0
     property int bonusActive: 0
     property bool specialStageActive: freeSpinActive > 0 || bonusActive > 0
@@ -31,12 +36,18 @@ OrientationPage {
     property int _bonusCounter: 0
     property int _freeCounter: 0
 
+    property alias reelSym1: reel1.currentSymbol
+    property alias reelSym2: reel2.currentSymbol
+    property alias reelSym3: reel3.currentSymbol
+
 
     property bool _lastSpinActive: false
 
-    onActiveFocusChanged: autoSpinActive = activeFocus ? _lastSpinActive : false
+    onActiveFocusChanged: {
+        autoSpinActive = activeFocus ? _lastSpinActive : false
+    }
 
-    Component.onCompleted: _vegasModeInit()
+    Component.onCompleted: { _vegasModeInit(); playMusic.play(); playSpin.play()}
 
     onHeightChanged: _vegasModeInit()
 
@@ -47,6 +58,7 @@ OrientationPage {
             var rules = new Rules.Rules(reel1, reel2, reel3)
             var tempCoins = 0
             if(rules.isWinner()) {
+                playWin.play()
                 var earning = rules.getEarnings(bet)
                 Console.info("USER WON " + earning)
 
@@ -165,7 +177,7 @@ OrientationPage {
             text: qsTr("Spin!")
             onClicked: spin()
 
-            enabled: !spinningNow && _hasBareMinimumCoins()
+            enabled: canSpin
         }
     }
 
@@ -179,6 +191,32 @@ OrientationPage {
             onEnabledChanged: if(!enabled) { _lastSpinActive = false; autoSpinActive = false }
         }
     }
+
+    MediaPlayer {
+        id: playMusic
+        source: "../../sounds/amient_piano.wav"
+        muted: !applicationActive || !settings.bgm
+        volume: 0.2
+        loops: MediaPlayer.Infinite
+    }
+
+
+    MediaPlayer {
+        id: playWin
+        source: "../../sounds/payout.mp3"
+        loops: 0
+        volume: 0.5
+        muted: !applicationActive || !settings.sfx
+    }
+
+    MediaPlayer {
+        id: playSpin
+        source: "../../sounds/spin.wav"
+        loops: MediaPlayer.Infinite
+        volume: 1
+        muted: !applicationActive || !settings.sfx || !spinningNow
+    }
+
 
     // ------- Start UI ----------
 
@@ -321,43 +359,21 @@ OrientationPage {
         }
     }
 
-    Rectangle {
-        id: reel1Rect
-        z: -100
-        opacity: 0
-        width: reel1.width
-        height: reel1.height
-        color: "transparent"
-        x: reel1.x
-        y: reel1.y + (isLandscape ? Theme.paddingLarge : 0)
-    }
-
-    // https://doc.qt.io/qt-5/qml-qtgraphicaleffects-rectangularglow.html
-    //Need rectangular glow
-    // Glow works, with a rectangle, but the rectangle color overtakes the phone background
-    Glow {
-        id: glow
-        anchors.fill: reel1Rect
-        radius: reel1.state == "spinning" ? 20 : 0
-        source: reel1Rect
-        spread: 0.15
-        color: Theme.highlightColor
-        z: -1
-    }
-
     Reel {
         id: reel1
         reelSize: mainApp.reelSizeCol
         onReelSizeChanged: recalculateReels(this, 1)
 
-        Component.onCompleted: recalculateReels(this, 1)
+        active: mainApp.activeFocus
 
+        Component.onCompleted: recalculateReels(this, 1)
     }
 
     Reel {
         id: reel2
         reelSize: mainApp.reelSizeCol
         onReelSizeChanged: recalculateReels(this, 2)
+        active: mainApp.activeFocus
 
         Component.onCompleted: recalculateReels(this, 2)
     }
@@ -366,6 +382,7 @@ OrientationPage {
         id: reel3
         reelSize: mainApp.reelSizeCol
         onReelSizeChanged: recalculateReels(this, 3)
+        active: mainApp.activeFocus
 
         Component.onCompleted: recalculateReels(this, 3)
     }
@@ -374,7 +391,7 @@ OrientationPage {
         id: indicatorLabel
 
         text: UIConstants.indicatorSymbol
-        font.pixelSize: mainApp.reelWidth
+        font.pixelSize: width
         color: Theme.highlightColor
 
         visible: reelSizeCol == UIConstants.LANDSCAPE_SYMBOL
@@ -418,6 +435,7 @@ OrientationPage {
     }
 
     function spin() {
+        playSpin.play()
         Console.info("Spinning, coin: " + coins + ", bet: " + bet)
         if(_hasBareMinimumCoins()) {
             if(bonusActive) {
@@ -430,6 +448,24 @@ OrientationPage {
             reel1.spin(UIConstants.spinDuration1Ms)
             reel2.spin(UIConstants.spinDuration2Ms)
             reel3.spin(UIConstants.spinDuration3Ms)
+        }
+    }
+
+    function quickSpin() {
+        Console.info("Spinning, coin: " + coins + ", bet: " + bet)
+        if(_hasBareMinimumCoins()) {
+            if(bonusActive) {
+                bonusActive--
+            } else if(freeSpinActive) {
+                freeSpinActive --
+            } else
+                addCoins(-1 * bet)
+
+            quickSpinningNow = true
+            reel1.createSymbols()
+            reel2.createSymbols()
+            reel3.createSymbols()
+            quickSpinningNow = false
         }
     }
 
@@ -479,5 +515,9 @@ OrientationPage {
 
     function _hasBareMinimumCoins() {
         return coins * UIConstants.betThreshold >= UIConstants.bets[0]
+    }
+
+    function getWinningSymbol() {
+        return new Rules.Rules(reel1, reel2, reel3).getMostValuableSymbol()
     }
 }

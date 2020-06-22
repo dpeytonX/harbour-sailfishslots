@@ -4,8 +4,13 @@
 <context>
     <name>CoverPage</name>
     <message>
-        <location filename="../qml/cover/CoverPage.qml" line="12"/>
+        <location filename="../qml/cover/CoverPage.qml" line="13"/>
         <source>Sailfish Slots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/cover/CoverPage.qml" line="23"/>
+        <source>Coins</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -65,73 +70,73 @@
 <context>
     <name>MainApp</name>
     <message>
-        <location filename="../qml/pages/MainApp.qml" line="126"/>
+        <location filename="../qml/pages/MainApp.qml" line="138"/>
         <source>Slot machine</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainApp.qml" line="165"/>
+        <location filename="../qml/pages/MainApp.qml" line="177"/>
         <source>Spin!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainApp.qml" line="175"/>
+        <location filename="../qml/pages/MainApp.qml" line="187"/>
         <source>Stop Auto Spin</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainApp.qml" line="175"/>
+        <location filename="../qml/pages/MainApp.qml" line="187"/>
         <source>Auto Spin</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainApp.qml" line="197"/>
+        <location filename="../qml/pages/MainApp.qml" line="235"/>
         <source>Give me coins!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainApp.qml" line="207"/>
+        <location filename="../qml/pages/MainApp.qml" line="245"/>
         <source>Help</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainApp.qml" line="212"/>
+        <location filename="../qml/pages/MainApp.qml" line="250"/>
         <source>About</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainApp.qml" line="217"/>
+        <location filename="../qml/pages/MainApp.qml" line="255"/>
         <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainApp.qml" line="226"/>
+        <location filename="../qml/pages/MainApp.qml" line="264"/>
         <source>Bonus</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainApp.qml" line="227"/>
+        <location filename="../qml/pages/MainApp.qml" line="265"/>
         <source>Free Spin</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainApp.qml" line="237"/>
+        <location filename="../qml/pages/MainApp.qml" line="275"/>
         <source>Spins</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainApp.qml" line="237"/>
+        <location filename="../qml/pages/MainApp.qml" line="275"/>
         <source>Spins Remaining</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainApp.qml" line="266"/>
-        <location filename="../qml/pages/MainApp.qml" line="296"/>
+        <location filename="../qml/pages/MainApp.qml" line="304"/>
+        <location filename="../qml/pages/MainApp.qml" line="334"/>
         <source>Coins</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainApp.qml" line="301"/>
+        <location filename="../qml/pages/MainApp.qml" line="339"/>
         <source>Bet</source>
         <translation type="unfinished"></translation>
     </message>
@@ -149,67 +154,67 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="51"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="52"/>
         <source>Sound</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="56"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="57"/>
         <source>Enable background music</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="70"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="71"/>
         <source>Enable sound effects</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="78"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="79"/>
         <source>Miscellaneous</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="104"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="105"/>
         <source>Set coins</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="117"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="118"/>
         <source>Special</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="124"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="125"/>
         <source>Vegas</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="125"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="126"/>
         <source>Simulate a lever using the pull down menu</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="109"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="110"/>
         <source>Enter coin value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="137"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="138"/>
         <source>Bonus Spins</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="144"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="145"/>
         <source>Free Spins</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="82"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="83"/>
         <source>Switching languages requires an application restart</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="83"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="84"/>
         <source>Language</source>
         <translation type="unfinished"></translation>
     </message>

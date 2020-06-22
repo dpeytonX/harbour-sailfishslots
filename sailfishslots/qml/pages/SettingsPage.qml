@@ -48,6 +48,7 @@ OrientationPage {
             spacing: Theme.paddingSmall
 
             title: qsTr("Settings")
+
             Subtext {text: qsTr("Sound")}
 
             TextSwitch {

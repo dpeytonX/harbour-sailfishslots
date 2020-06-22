@@ -10,12 +10,17 @@ Column  {
     id: reelColumn
     signal spin(int duration)
     signal spinOver
+    signal reelMoved
 
     property alias spinTimerDuration: spinTimer.duration
 
     property variant symbols: []
+    property string currentSymbol: symbols.length == 0 ? "" : symbols[getSelectedComponent()].text
+
     property variant reelSize: UIConstants.PORTRAIT_SYMBOL
     property bool spinning: false
+
+    property bool active: true
 
     states: [
         State {
@@ -83,17 +88,20 @@ Column  {
         property int duration
 
         onTriggered: {
-            spinning = true
-            createSymbols()
+            if(active) {
+                spinning = true
+                createSymbols()
 
-            cur += interval
-            if(cur >= duration) {
-                cur = 0
-                spinning = false
-                stop()
-                spinOver()
-            } else {
-                _cleanUp()
+                cur += interval
+                reelMoved()
+                if(cur >= duration) {
+                    cur = 0
+                    spinning = false
+                    stop()
+                    spinOver()
+                } else {
+                    _cleanUp()
+                }
             }
         }
     }

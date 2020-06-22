@@ -38,13 +38,14 @@ OTHER_FILES += rpm/* \
     translations/*.ts \
     harbour/sailfishslots/* \
     harbour/sailfishslots/SailfishSlots/* \
+    sounds/* \
     $${TARGET}.desktop \
     lib/libapplicationsettings.so \
     lib/libcore.so.1 \
     lib/liblanguage.so \
     images.qrc
 
-QT += qml
+QT += qml multimedia
 
 QML_IMPORT_PATH = .
 QML2_IMPORT_PATH += $$_PRO_FILE_PWD_/harbour/sailfishslots/SailfishWidgets/Settings
@@ -53,7 +54,7 @@ target.path = /usr/bin
 INSTALLS += target
 
 #install lib
-ss.files = harbour lib
+ss.files = harbour lib sounds
 ss.path = /usr/share/$${TARGET}
 INSTALLS += ss
 

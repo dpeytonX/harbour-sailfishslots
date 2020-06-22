@@ -18,8 +18,8 @@ function Rules(reelObj1, reelObj2, reelObj3) {
          sym3 == UIConstants.freeSpinIndex
 
     this.isWinner = function() {
-        console.debug("sym1: " + sym1 + ", sym2: " + sym2 + ", sym3: " + sym3)
-        console.debug("3 of a kind: " + this.threeOfAKind + ", 2 of a kind: " + this.twoOfAKindWild + ", 1 of a kind: " + this.oneOfAKindWilds + ", free spin: " + this.freeSpin)
+        //console.debug("sym1: " + sym1 + ", sym2: " + sym2 + ", sym3: " + sym3)
+        //console.debug("3 of a kind: " + this.threeOfAKind + ", 2 of a kind: " + this.twoOfAKindWild + ", 1 of a kind: " + this.oneOfAKindWilds + ", free spin: " + this.freeSpin)
         return this.threeOfAKind || this.twoOfAKindWild || this.oneOfAKindWilds || this.freeSpin
     }
 

@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/sounds">
+        <file alias="payout">sounds/payout.mp3</file>
+        <file alias="spin">sounds/spin.wav</file>
+        <file alias="bgm">sounds/amient_piano.wav</file>
+    </qresource>
+</RCC>

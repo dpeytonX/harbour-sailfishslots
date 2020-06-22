@@ -3,3 +3,4 @@ Reel 1.0 Reel.qml
 UIConstants 1.0 UIConstants.js
 Rules 1.0 Rules.js
 SpinningAnimation 1.0 SpinningAnimation.qml
+BorderBox 1.0 BorderBox.qml
