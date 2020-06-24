@@ -14,6 +14,7 @@ OrientationDialog {
         PageColumn {
             id: aboutRectangle
             anchors.horizontalCenter: parent.horizontalCenter
+            anchors.leftMargin: Theme.paddingSmall
             width: parent.width
             spacing: Theme.paddingSmall
 
@@ -24,41 +25,52 @@ OrientationDialog {
             }
 
             Paragraph {
-                text: qsTr("It's simple! Catch as many blocks as you can while avoiding the mysterious 'evil block'.")
+                text: qsTr("Use the %1 or %2 feature to start the slot reel. Using %2 will allow you to spin as long as your total coins is greater than the minimum bet.").arg(qsTr("Spin")).arg(qsTr("Auto Spin"))
             }
 
             Paragraph {
-                text: qsTr("Move your player by pressing and holding the stationary block at the bottom of the screen. You may move left and right in order to align yourself to the falling block above. Upon successful alignment you will increase your score. However, touching the 'evil block' will descrease your score and the number of lives you have. The game ends once all lives are depleted.")
+                text: qsTr("You may increase your bet to multiply your earnings on a winning combination. However, a high bet may also drain your coins faster.")
+            }
+
+            Paragraph {
+                text: qsTr("This slot has two special modes %1 and %2. %1 will grant you free plays. %2 will also grant you free plays with an additional jackpot upon completion.").arg(qsTr("Free Spin")).arg(qsTr("Bonus"))
             }
 
             Heading {
-                text: qsTr("Scoring")
+                text: qsTr("Winning Combinations")
             }
 
             Grid {
-                columns: 2
+                columns: 1
                 spacing: Theme.paddingSmall
 
-
                 InformationalLabel {
-                    text: qsTr("Slowest block") + " +" + UIConstants.pointsEasy
+                    text: qsTr("Three of a kind")
                 }
 
                 InformationalLabel {
-                    text: qsTr("Slightly faster") + " +" + UIConstants.pointsMedium
+                    text: qsTr("Two of a kind and %1 symbol").arg(UIConstants.symbols[UIConstants.wildIndex])
                 }
 
                 InformationalLabel {
-                    text: qsTr("Fastest") + " +" + UIConstants.pointsHard
+                    text: qsTr("One of a kind and two %1 symbols").arg(UIConstants.symbols[UIConstants.wildIndex])
                 }
+            }
 
-                InformationalLabel {
-                    text: qsTr("Takes a life") + " " + UIConstants.pointsEvil
-                }
+            Heading {
+                text: qsTr("Bonus")
+            }
 
-                InformationalLabel {
-                    text: qsTr("Grants invincibility") + " " + UIConstants.pointsStar
-                }
+            InformationalLabel {
+                text: qsTr("Any combination of %1 and %2").arg(UIConstants.symbols[UIConstants.sevenIndex]).arg(UIConstants.symbols[UIConstants.wildIndex])
+            }
+
+            Heading {
+                text: qsTr("Free Spin")
+            }
+
+            InformationalLabel {
+                text: qsTr("At least one %1 present").arg(UIConstants.symbols[UIConstants.freeSpinIndex])
             }
         }
     }

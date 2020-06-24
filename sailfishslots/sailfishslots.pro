@@ -58,6 +58,18 @@ ss.files = harbour lib sounds
 ss.path = /usr/share/$${TARGET}
 INSTALLS += ss
 
+png1.files = icons/hicolor/*
+png1.path = /usr/share/icons/hicolor
+INSTALLS += png1
+
+#png2.files = harbour-sailfishslots_128x128.png
+#png2.path = /usr/share/icons/hicolor/128x128/apps/$${TARGET}.png
+#INSTALLS += png2
+
+#png3.files = harbour-sailfishslots_172x172.png
+#png3.path = /usr/share/icons/hicolor/172x172/apps/$${TARGET}.png
+#INSTALLS += png3
+
 ### Rename QML modules for Harbour store
 swlc.path = /usr/share/$${TARGET}/harbour/sailfishslots
 swlc.commands = find /home/deploy/installroot$$swl.path -name 'qmldir' -exec sed -i \"s/module SailfishWidgets/module harbour.sailfishslots.SailfishWidgets/\" \\{} \;;
@@ -79,6 +91,3 @@ TRANSLATIONS += translations/$${TARGET}.ts \
 
 RESOURCES += \
     images.qrc
-
-DISTFILES += \
-    qml/pages/SpecialStage.qml

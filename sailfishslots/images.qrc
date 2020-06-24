@@ -2,5 +2,6 @@
     <qresource prefix="/images">
         <file alias="desktop.png">harbour-sailfishslots.png</file>
         <file alias="cover.png">cover-sailfishslots.png</file>
+        <file alias="desktop-large.png">icons/hicolor/172x172/apps/harbour-sailfishslots.png</file>
     </qresource>
 </RCC>

@@ -2,6 +2,7 @@
 
 var coverIcon = "qrc:///images/cover.png"
 var appIcon = "qrc:///images/desktop.png"
+var appIconLarge = "qrc:///images/desktop-large.png"
 var appName = "harbour-sailfishslots"
 var appTitle = "Sailfish Slots"
 var appContrib = ["Dametrious Peyton"]
@@ -10,7 +11,15 @@ var appCopyrightYear = "2020"
 var appLicenses = ["GPL v3"]
 var appVersion = "1.0"
 var appLinks = ["https://github.com/prplmnky/harbour-sailfishslots"]
-
+var appAttributions = ["\"Mystic Piano\" by Erokia at Freesound.org",
+                       "    Creative Commons 3.0",
+                       "\'Slot 6\' by .milton at Freesound.org",
+                       "    Creative Commons 3.0",
+                       "\'Playing cards being shuffled\' by 140178sound at Freesound.org",
+                       "    Creative Commons 3.0",
+                       "<a href=\"https://creativecommons.org/licenses/by-nc/3.0/\">Creative Commons License</a>"]
+var btc = "3NeDGutmC7hc5Dv2cUX8YcvPWaUXZm3KAF"
+var paypal = "<a href=\"paypal.me/DametriousP\">paypal.me/DametriousP</a>"
 var PORTRAIT_SYMBOL = 1
 var LANDSCAPE_SYMBOL = 3
 var MAX_SYMBOL = 3

@@ -130,17 +130,7 @@ OrientationPage {
 
     Component {
         id: aboutPage
-        AboutDialog {
-            application: UIConstants.appTitle + " " + UIConstants.appVersion
-            contributors: UIConstants.appContrib
-            copyrightHolder: UIConstants.appCopyrightHolder
-            copyrightYear: UIConstants.appCopyrightYear
-            description: qsTr("Slot machine")
-            icon: UIConstants.appIcon
-            licenses: UIConstants.appLicenses
-            pageTitle: UIConstants.appTitle
-            projectLinks: UIConstants.appLinks
-        }
+        About {}
     }
 
     Component {

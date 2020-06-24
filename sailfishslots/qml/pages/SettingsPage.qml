@@ -6,8 +6,6 @@ import harbour.sailfishslots.SailfishWidgets.Language 3.3
 import harbour.sailfishslots.SailfishSlots 1.0
 import harbour.sailfishslots.QmlLogger 2.0
 
-//TODO: Fix scrolling on Settings and Help pages. See About page
-//TODO: test bonus mode
 OrientationPage {
     id: settingsPage
 
@@ -101,6 +99,8 @@ OrientationPage {
                     cheatChecks = 0
                 }
             }
+
+            Heading { visible: cheatMode; text: qsTr("Cheat Mode")}
 
             Subtext { visible: cheatMode; text: qsTr("Set coins")}
 

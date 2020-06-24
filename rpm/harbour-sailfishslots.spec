@@ -82,5 +82,8 @@ desktop-file-install --delete-original       \
 %attr(644, root, root) %{_datadir}/%{name}/harbour/sailfishslots/SailfishWidgets/*.qmltypes
 %attr(644, root, root) %{_datadir}/applications/%{name}.desktop
 %attr(644, root, root) %{_datadir}/icons/hicolor/86x86/apps/%{name}.png
+%attr(644, root, root) %{_datadir}/icons/hicolor/108x108/apps/%{name}.png
+%attr(644, root, root) %{_datadir}/icons/hicolor/128x128/apps/%{name}.png
+%attr(644, root, root) %{_datadir}/icons/hicolor/172x172/apps/%{name}.png
 # >> files
 # << files
